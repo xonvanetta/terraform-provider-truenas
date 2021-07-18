@@ -3,14 +3,9 @@ package truenas
 import (
 	"context"
 
-	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/pool"
-
-	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/sharing"
-
-	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
 )
 
 func Provider() *schema.Provider {
@@ -29,12 +24,13 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"truenas_sharing_nfs":  sharing.NFSResource(),
-			"truenas_pool_dataset": pool.DatasetResource(),
+			"truenas_sharing_nfs":  resourceSharingNFS(),
+			"truenas_pool_dataset": resourcePoolDataset(),
+			"truenas_service_nfs":  resourceServiceNFS(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"truenas_sharing_nfs":  sharing.DataNFSResource(),
-			"truenas_pool_dataset": pool.DataDatasetResource(),
+			"truenas_sharing_nfs":  dataSourceSharingNFS(),
+			"truenas_pool_dataset": dataSourcePoolDataset(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
@@ -49,4 +45,12 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	}
 
 	return v2.NewClient(host, apiKey), nil
+}
+
+func toStrings(v []interface{}) []string {
+	var s []string
+	for _, i := range v {
+		s = append(s, i.(string))
+	}
+	return s
 }

@@ -7,12 +7,10 @@ import (
 	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
 )
 
-var accClient v2.Client
-
-func init() {
+func getAccClient() v2.Client {
 	acc := os.Getenv(resource.TestEnvVar)
 	if acc != "1" {
-		return
+		return nil
 	}
 	//
 	host := os.Getenv("TRUENAS_HOST")
@@ -25,5 +23,5 @@ func init() {
 		panic("can't run e2e tests with api accClient, missing TRUENAS_API_KEY in env")
 	}
 
-	accClient = v2.NewClient(host, apiKey)
+	return v2.NewClient(host, apiKey)
 }

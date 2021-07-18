@@ -1,4 +1,4 @@
-package pool
+package truenas
 
 import (
 	"context"
@@ -11,9 +11,9 @@ import (
 	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
 )
 
-func DataDatasetResource() *schema.Resource {
+func dataSourcePoolDataset() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataDatasetRead,
+		ReadContext: dataSourcePoolDatasetRead,
 		Schema: map[string]*schema.Schema{
 			"truenas_pool_dataset": {
 				Type:     schema.TypeList,
@@ -171,47 +171,47 @@ func flattenDatasetData(list []*pool.Dataset) []interface{} {
 	l := make([]interface{}, len(list), len(list))
 	for i, dataset := range list {
 		d := make(map[string]interface{})
-		d["id"] = dataset.ID
+		//d["id"] = dataset.ID
 		d["type"] = dataset.Type
 		d["name"] = dataset.Name
-		d["pool"] = dataset.Pool
-		d["encrypted"] = dataset.Encrypted
-		d["encryption_root"] = dataset.EncryptionRoot
-		d["key_loaded"] = dataset.KeyLoaded
-		d["mountpoint"] = dataset.Mountpoint
-		d["deduplication"] = dataset.Deduplication.String()
-		d["aclmode"] = dataset.Aclmode.String()
-		d["acltype"] = dataset.Acltype.String()
-		d["xattr"] = dataset.Xattr.String()
-		d["atime"] = dataset.Atime.String()
-		d["casesensitivity"] = dataset.Casesensitivity.String()
-		d["exec"] = dataset.Exec.String()
-		d["sync"] = dataset.Sync.String()
-		d["compression"] = dataset.Compression.String()
-		d["compressratio"] = dataset.Compressratio.String()
-		d["origin"] = dataset.Origin.String()
-		d["quota"] = dataset.Quota.String()
-		d["refquota"] = dataset.Refquota.String()
-		d["reservation"] = dataset.Reservation.String()
-		d["refreservation"] = dataset.Refreservation.String()
-		d["copies"] = dataset.Copies.String()
-		d["snapdir"] = dataset.Snapdir.String()
-		d["readonly"] = dataset.Readonly.String()
-		d["recordsize"] = dataset.Recordsize.String()
-		d["key_format"] = dataset.KeyFormat.String()
-		d["encryption_algorithm"] = dataset.EncryptionAlgorithm.String()
-		d["used"] = dataset.Used.String()
-		d["available"] = dataset.Available.String()
-		d["special_small_block_size"] = dataset.SpecialSmallBlockSize.String()
-		d["pbkdf2iters"] = dataset.Pbkdf2Iters.String()
-		d["locked"] = dataset.Locked
+		//d["pool"] = dataset.Pool
+		//d["encrypted"] = dataset.Encrypted
+		//d["encryption_root"] = dataset.EncryptionRoot
+		//d["key_loaded"] = dataset.KeyLoaded
+		//d["mountpoint"] = dataset.Mountpoint
+		//d["deduplication"] = dataset.Deduplication.String()
+		//d["aclmode"] = dataset.Aclmode.String()
+		//d["acltype"] = dataset.Acltype.String()
+		//d["xattr"] = dataset.Xattr.String()
+		//d["atime"] = dataset.Atime.String()
+		//d["casesensitivity"] = dataset.Casesensitivity.String()
+		//d["exec"] = dataset.Exec.String()
+		//d["sync"] = dataset.Sync.String()
+		//d["compression"] = dataset.Compression.String()
+		//d["compressratio"] = dataset.Compressratio.String()
+		//d["origin"] = dataset.Origin.String()
+		//d["quota"] = dataset.Quota.String()
+		//d["refquota"] = dataset.Refquota.String()
+		//d["reservation"] = dataset.Reservation.String()
+		//d["refreservation"] = dataset.Refreservation.String()
+		//d["copies"] = dataset.Copies.String()
+		//d["snapdir"] = dataset.Snapdir.String()
+		//d["readonly"] = dataset.Readonly.String()
+		//d["recordsize"] = dataset.Recordsize.String()
+		//d["key_format"] = dataset.KeyFormat.String()
+		//d["encryption_algorithm"] = dataset.EncryptionAlgorithm.String()
+		//d["used"] = dataset.Used.String()
+		//d["available"] = dataset.Available.String()
+		//d["special_small_block_size"] = dataset.SpecialSmallBlockSize.String()
+		//d["pbkdf2iters"] = dataset.Pbkdf2Iters.String()
+		//d["locked"] = dataset.Locked
 
 		l[i] = d
 	}
 	return l
 }
 
-func dataDatasetRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func dataSourcePoolDatasetRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	list, err := m.(v2.Client).PoolDataset().List(ctx)
 	if err != nil {
 		return diag.Errorf("failed to get dataset list: %s", err)

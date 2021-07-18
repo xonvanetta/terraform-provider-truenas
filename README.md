@@ -1,64 +1,71 @@
 # Terraform Provider Truenas
 
-Early provider for NFS sharing and dataset creation
+Truenas provider that will be used to create datasets,shares and more, also to manage truenas settings as services etc.
 
-##TODO:
-* Add tests
-* Add end to end tests
-* Support dataset
-* Support NFS service config
+## TODO:
 
-
-This repository is a *template* for a [Terraform](https://www.terraform.io) provider. It is intended as a starting point for creating Terraform providers, containing:
-
-- A resource, and a data source (`internal/provider/`),
-- Examples (`examples/`) and generated documentation (`docs/`),
-- Miscellaneous meta files.
-
-These files contain boilerplate code that you will need to edit to create your own Terraform provider. A full guide to creating Terraform providers can be found at [Writing Custom Providers](https://www.terraform.io/docs/extend/writing-custom-providers.html).
-
-Please see the [GitHub template repository documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) for how to create a new repository from this template on GitHub.
-
-Once you've written your provider, you'll want to [publish it on the Terraform Registry](https://www.terraform.io/docs/registry/providers/publishing.html) so that others can use it.
-
+- [ ] Support NFS service config
+    - [X] Basic implementation
+    - [X] Baisc test
+    - [ ] Missing `MountdPort`,`RpcstatdPort`,`RpclockdPort`
+- [ ] Support Dataset/Volume Basic
+    - [X] Basic resource implementation
+    - [ ] Basic data implementation
+    - [X] Baisc test
+    - [ ] Permissions
+    - [ ] Encryption
+- [ ] Support Shares
+    - [ ] NFS
+        - [X] Basic implementation
+        - [ ] Tests
+    - [ ] SMB
+        - [ ] Basic implementation
+        - [ ] Tests
+- [ ] Users
+- [ ] Support Pools (Not knowing if it's a good idea or just rely on first time creation)
+- [ ] Everything else from the api..
 
 ## Requirements
 
--	[Terraform](https://www.terraform.io/downloads.html) >= 2.x? 
--	[Go](https://golang.org/doc/install) >= 1.16
+- [Terraform](https://www.terraform.io/downloads.html) >= 2.x?
+- [Go](https://golang.org/doc/install) >= 1.16
+- [Truenas](https://www.truenas.com/download-truenas-scale/) v2 api (should be installed on vm/bare metal machine)
 
 ## Building The Provider
 
 1. Clone the repository
 1. Enter the repository directory
 1. Build the provider using the Go `install` command:
+
 ```sh
 $ go install
 ```
 
 ## Adding Dependencies
 
-This provider uses [Go modules](https://github.com/golang/go/wiki/Modules).
-Please see the Go documentation for the most up to date information about using Go modules.
+This provider uses [Go modules](https://github.com/golang/go/wiki/Modules). Please see the Go documentation for the most
+up to date information about using Go modules.
 
 To add a new dependency `github.com/author/dependency` to your Terraform provider:
 
-```
-go get github.com/author/dependency
-go mod tidy
+```sh
+$kgo get github.com/author/dependency
+$ go mod tidy
 ```
 
 Then commit the changes to `go.mod` and `go.sum`.
 
 ## Using the provider
 
-Fill this in for each provider
+See the [examples](examples) or check the docs
 
 ## Developing the Provider
 
-If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (see [Requirements](#requirements) above).
+If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (
+see [Requirements](#requirements) above).
 
-To compile the provider, run `go install`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
+To compile the provider, run `go install`. This will build the provider and put the provider binary in the `$GOPATH/bin`
+directory.
 
 To generate or update documentation, run `go generate`.
 

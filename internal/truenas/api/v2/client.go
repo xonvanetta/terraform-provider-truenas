@@ -11,16 +11,20 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2/service"
+
 	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2/pool"
 
 	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2/sharing"
 )
 
 type Client interface {
-	Get(context context.Context, path string, v interface{}) error
+	//Get(context context.Context, path string, v interface{}) error
 
 	SharingNFS() sharing.NFSService
 	PoolDataset() pool.DatasetService
+	ServiceNFS() service.NFSService
+	Service() service.ServiceService
 
 	//ListNFS(ctx context.Context) ([]*NFS, error)
 	//CreateNFS(ctx context.Context, nfs *NFS) error
@@ -46,6 +50,8 @@ type client struct {
 
 	sharingNFSService  sharing.NFSService
 	poolDatasetService pool.DatasetService
+	serviceNFS         service.NFSService
+	serviceService     service.ServiceService
 }
 
 func NewClient(host, apiKey string) Client {
@@ -53,12 +59,14 @@ func NewClient(host, apiKey string) Client {
 		host:   host,
 		apiKey: apiKey,
 		http: &http.Client{
-			Timeout: time.Second * 10,
+			Timeout: time.Second * 30,
 		},
 	}
 
 	client.sharingNFSService = sharing.NewNFSService(client)
 	client.poolDatasetService = pool.NewDatasetService(client)
+	client.serviceNFS = service.NewNFSService(client)
+	client.serviceService = service.NewService(client)
 
 	return client
 }
@@ -71,12 +79,20 @@ func (c client) PoolDataset() pool.DatasetService {
 	return c.poolDatasetService
 }
 
+func (c client) ServiceNFS() service.NFSService {
+	return c.serviceNFS
+}
+
+func (c client) Service() service.ServiceService {
+	return c.serviceService
+}
+
 func (c client) Post(ctx context.Context, path string, body interface{}, v interface{}) error {
 	return c.request(ctx, http.MethodPost, path, body, v)
 }
 
-func (c client) Get(ctx context.Context, path string, v interface{}) error {
-	return c.request(ctx, http.MethodGet, path, nil, v)
+func (c client) Get(ctx context.Context, path string, body interface{}, v interface{}) error {
+	return c.request(ctx, http.MethodGet, path, body, v)
 }
 
 func (c client) Put(ctx context.Context, path string, body interface{}, v interface{}) error {
@@ -117,11 +133,10 @@ func (c client) request(ctx context.Context, method, path string, body interface
 	if response.StatusCode == http.StatusNotFound {
 		return ErrNotFound
 	}
+	//TODO: list codes in allowed
 	if response.StatusCode != http.StatusOK {
 		b, _ := io.ReadAll(response.Body)
-		//TODO: list codes in allowed
 		return fmt.Errorf("wrong status code, got: %d, body: %s", response.StatusCode, string(b))
-		//return responseError(response, fmt.Errorf("wrong status code"))
 	}
 
 	if v == nil {

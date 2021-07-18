@@ -9,9 +9,12 @@ import (
 
 type Client interface {
 	Post(ctx context.Context, path string, body interface{}, v interface{}) error
-	Get(ctx context.Context, path string, v interface{}) error
+	Get(ctx context.Context, path string, body interface{}, v interface{}) error
 	Put(ctx context.Context, path string, body interface{}, v interface{}) error
 	Delete(ctx context.Context, path string) error
 }
 
-var ErrNotImplemented = errors.New("not implemented")
+var (
+	ErrNotImplemented = errors.New("not implemented")
+	ErrNotFound       = errors.New("not found")
+)

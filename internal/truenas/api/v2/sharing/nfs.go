@@ -66,13 +66,13 @@ func (n *NFS) sanitize() {
 
 func (s nfsService) List(ctx context.Context) ([]*NFS, error) {
 	var list []*NFS
-	err := s.client.Get(ctx, "sharing/nfs", &list)
+	err := s.client.Get(ctx, "sharing/nfs", nil, &list)
 	return list, err
 }
 
 func (s nfsService) Get(ctx context.Context, id int) (*NFS, error) {
 	nfs := &NFS{}
-	err := s.client.Get(ctx, fmt.Sprint("sharing/nfs/id/", id), nfs)
+	err := s.client.Get(ctx, fmt.Sprint("sharing/nfs/id/", id), nil, nfs)
 	return nfs, err
 }
 

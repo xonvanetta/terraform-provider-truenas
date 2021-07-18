@@ -18,40 +18,27 @@ description: |-
 ### Required
 
 - **name** (String)
+- **type** (String)
 
 ### Optional
 
 - **aclmode** (String)
 - **acltype** (String)
 - **atime** (String)
-- **available** (String)
 - **casesensitivity** (String)
+- **comments** (String)
 - **compression** (String)
-- **compressratio** (String)
-- **copies** (String)
 - **deduplication** (String)
-- **encrypted** (Boolean)
-- **encryption_algorithm** (String)
-- **encryption_root** (String)
 - **exec** (String)
-- **key_format** (String)
-- **key_loaded** (Boolean)
-- **locked** (Boolean)
-- **mountpoint** (String)
-- **origin** (String)
-- **pbkdf2iters** (String)
-- **pool** (String)
-- **quota** (String)
+- **force_size** (Boolean)
+- **inherit_encryption** (Boolean)
 - **readonly** (String)
 - **recordsize** (String)
-- **refquota** (String)
-- **refreservation** (String)
-- **reservation** (String)
-- **snapdir** (String)
-- **special_small_block_size** (String)
+- **share_type** (String)
+- **sparse** (Boolean) used by VOLUME to use Thin provisioning, ONLY USED WITH CREATING THE VOLUME!
 - **sync** (String)
-- **type** (String)
-- **used** (String)
+- **volblocksize** (String)
+- **volsize** (String) Size in E,P,T,G,M,K,B bytes
 - **xattr** (String)
 
 ### Read-Only

@@ -1,26 +1,24 @@
-package sharing
+package truenas
 
 import (
 	"context"
 	"fmt"
 	"strconv"
 
-	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2/sharing"
-
-	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
+	"github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2/sharing"
 )
 
-func NFSResource() *schema.Resource {
+func resourceSharingNFS() *schema.Resource {
 	return &schema.Resource{
-		ReadContext:   nfsRead,
-		CreateContext: nfsCreate,
-		UpdateContext: nfsUpdate,
-		DeleteContext: nfsDelete,
+		ReadContext:   sharingNFSRead,
+		CreateContext: sharingNFSCreate,
+		UpdateContext: sharingNFSUpdate,
+		DeleteContext: sharingNFSDelete,
 		Importer: &schema.ResourceImporter{
-			StateContext: nfsImport,
+			StateContext: sharingNFSImport,
 		},
 		Schema: map[string]*schema.Schema{
 			"id": {
@@ -100,18 +98,7 @@ func NFSResource() *schema.Resource {
 				Optional: true,
 			},
 		},
-		//},
-		//},
-		//},
 	}
-}
-
-func toStrings(v []interface{}) []string {
-	var s []string
-	for _, i := range v {
-		s = append(s, i.(string))
-	}
-	return s
 }
 
 func nfsFromSchema(d *schema.ResourceData) *sharing.NFS {
@@ -133,7 +120,7 @@ func nfsFromSchema(d *schema.ResourceData) *sharing.NFS {
 	}
 }
 
-func nfsCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func sharingNFSCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	nfs := nfsFromSchema(d)
 
 	err := m.(v2.Client).SharingNFS().Create(ctx, nfs)
@@ -142,10 +129,10 @@ func nfsCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 	}
 
 	d.SetId(strconv.Itoa(nfs.Id))
-	return nfsRead(ctx, d, m)
+	return sharingNFSRead(ctx, d, m)
 }
 
-func nfsRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func sharingNFSRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Errorf("failed to format id to int: %s", err)
@@ -177,7 +164,7 @@ func nfsRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Di
 	return nil
 }
 
-func nfsUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func sharingNFSUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	nfs := nfsFromSchema(d)
 
 	var err error
@@ -191,10 +178,10 @@ func nfsUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 		return diag.Errorf("failed to update nfs: %s", err)
 	}
 
-	return nfsRead(ctx, d, m)
+	return sharingNFSRead(ctx, d, m)
 }
 
-func nfsDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func sharingNFSDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.Errorf("failed to format id to int: %s", err)
@@ -208,7 +195,7 @@ func nfsDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 	return nil
 }
 
-func nfsImport(ctx context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+func sharingNFSImport(ctx context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return nil, fmt.Errorf("failed to format id to int: %w", err)

@@ -1,4 +1,4 @@
-package sharing
+package truenas
 
 import (
 	"context"
@@ -12,9 +12,9 @@ import (
 	v2 "github.com/xonvanetta/terraform-provider-truenas/internal/truenas/api/v2"
 )
 
-func DataNFSResource() *schema.Resource {
+func dataSourceSharingNFS() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataNFSRead,
+		ReadContext: dataSourceSharingNFSRead,
 		Schema: map[string]*schema.Schema{
 			"truenas_sharing_nfs": {
 				Type:     schema.TypeList,
@@ -133,7 +133,7 @@ func flattenNFSData(list []*sharing.NFS) []interface{} {
 	return l
 }
 
-func dataNFSRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func dataSourceSharingNFSRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	list, err := m.(v2.Client).SharingNFS().List(ctx)
 	if err != nil {
 		return diag.Errorf("failed to get nfs list: %s", err)

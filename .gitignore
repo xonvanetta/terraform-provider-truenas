@@ -1,7 +1,6 @@
 terraform-provider-truenas
 
 
-/examples
 # Local .terraform directories
 **/.terraform/*
 
